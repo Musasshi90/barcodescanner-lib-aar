@@ -14,7 +14,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
   <style name="ResultButton" parent="@android:style/Widget.Holo.Button.Borderless.Small">
     <item name="android:layout_width">0dip</item>
@@ -25,5 +25,10 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
-
+  <style name="MaterialTheme" parent="Theme.AppCompat.NoActionBar" >
+    <item name="android:windowBackground">@android:color/white</item>
+    <item name="android:windowFullscreen">false</item>
+    <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">false</item>
+    <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item>
+  </style>
 </resources>

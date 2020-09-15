@@ -18,18 +18,24 @@ package com.google.zxing.client.android;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.ResultPointCallback;
+import com.google.zxing.client.android.custom.FrameView;
 
 final class ViewfinderResultPointCallback implements ResultPointCallback {
 
-  private final ViewfinderView viewfinderView;
+    private final ViewfinderView viewfinderView;
+    private final FrameView frameView;
 
-  ViewfinderResultPointCallback(ViewfinderView viewfinderView) {
-    this.viewfinderView = viewfinderView;
-  }
+    ViewfinderResultPointCallback(ViewfinderView viewfinderView, FrameView frameView) {
+        this.viewfinderView = viewfinderView;
+        this.frameView = frameView;
+    }
 
-  @Override
-  public void foundPossibleResultPoint(ResultPoint point) {
-    viewfinderView.addPossibleResultPoint(point);
-  }
+    @Override
+    public void foundPossibleResultPoint(ResultPoint point) {
+        if (viewfinderView != null)
+            viewfinderView.addPossibleResultPoint(point);
+        if (frameView != null)
+            frameView.addPossibleResultPoint(point);
+    }
 
 }

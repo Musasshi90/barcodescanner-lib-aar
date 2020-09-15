@@ -25,6 +25,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.google.zxing.client.android.camera.CameraManager;
+import com.google.zxing.client.android.custom.ZxingActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -49,7 +50,7 @@ public final class CaptureActivityHandler extends Handler {
 
   private static final String TAG = CaptureActivityHandler.class.getSimpleName();
 
-  private final CaptureActivity activity;
+  private final ZxingActivity activity;
   private final DecodeThread decodeThread;
   private State state;
   private final CameraManager cameraManager;
@@ -60,14 +61,14 @@ public final class CaptureActivityHandler extends Handler {
     DONE
   }
 
-  CaptureActivityHandler(CaptureActivity activity,
-                         Collection<BarcodeFormat> decodeFormats,
-                         Map<DecodeHintType,?> baseHints,
-                         String characterSet,
-                         CameraManager cameraManager) {
+  public CaptureActivityHandler(ZxingActivity activity,
+                                Collection<BarcodeFormat> decodeFormats,
+                                Map<DecodeHintType,?> baseHints,
+                                String characterSet,
+                                CameraManager cameraManager) {
     this.activity = activity;
     decodeThread = new DecodeThread(activity, decodeFormats, baseHints, characterSet,
-        new ViewfinderResultPointCallback(activity.getViewfinderView()));
+        new ViewfinderResultPointCallback(activity.getViewfinderView(), activity.getFrameView()));
     decodeThread.start();
     state = State.SUCCESS;
 
