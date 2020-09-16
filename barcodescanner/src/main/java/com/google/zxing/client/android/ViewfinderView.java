@@ -58,6 +58,7 @@ public final class ViewfinderView extends View {
   private int scannerAlpha;
   private List<ResultPoint> possibleResultPoints;
   private List<ResultPoint> lastPossibleResultPoints;
+  private int frameColor;
 
   // This constructor is used when the class is built from an XML resource.
   public ViewfinderView(Context context, AttributeSet attrs) {
@@ -70,6 +71,7 @@ public final class ViewfinderView extends View {
     resultColor = resources.getColor(R.color.result_view);
     laserColor = resources.getColor(R.color.viewfinder_laser);
     resultPointColor = resources.getColor(R.color.possible_result_points);
+    frameColor = resources.getColor(R.color.viewfinder_frame);
     scannerAlpha = 0;
     possibleResultPoints = new ArrayList<>(5);
     lastPossibleResultPoints = null;
@@ -106,12 +108,43 @@ public final class ViewfinderView extends View {
       canvas.drawBitmap(resultBitmap, null, frame, paint);
     } else {
 
-      // Draw a red "laser scanner" line through the middle to show decoding is active
+      int lineWidth = 10;
+      paint.setColor(frameColor);
+
+      //Draw frame
+      canvas.drawRect(15 + frame.left, 15 + frame.top,
+              15 + (lineWidth + frame.left), 15 + (50 + frame.top), paint);
+      canvas.drawRect(15 + frame.left, 15 + frame.top,
+              15 + (50 + frame.left), 15 + (lineWidth + frame.top), paint);
+      canvas.drawRect(-15 + ((0 - lineWidth) + frame.right),
+              15 + frame.top, -15 + (1 + frame.right),
+              15 + (50 + frame.top), paint);
+      canvas.drawRect(-15 + (-50 + frame.right), 15 + frame.top, -15
+              + frame.right, 15 + (lineWidth + frame.top), paint);
+      canvas.drawRect(15 + frame.left, -15 + (-49 + frame.bottom),
+              15 + (lineWidth + frame.left), -15 + (1 + frame.bottom),
+              paint);
+      canvas.drawRect(15 + frame.left, -15
+                      + ((0 - lineWidth) + frame.bottom), 15 + (50 + frame.left),
+              -15 + (1 + frame.bottom), paint);
+      canvas.drawRect(-15 + ((0 - lineWidth) + frame.right), -15
+              + (-49 + frame.bottom), -15 + (1 + frame.right), -15
+              + (1 + frame.bottom), paint);
+      canvas.drawRect(-15 + (-50 + frame.right), -15
+              + ((0 - lineWidth) + frame.bottom), -15 + frame.right, -15
+              + (lineWidth - (lineWidth - 1) + frame.bottom), paint);
+
+      // Draw a white "laser scanner" line through the middle to show decoding is active
       paint.setColor(laserColor);
       paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);
       scannerAlpha = (scannerAlpha + 1) % SCANNER_ALPHA.length;
-      int middle = frame.height() / 2 + frame.top;
-      canvas.drawRect(frame.left + 2, middle - 1, frame.right - 1, middle + 2, paint);
+      // juns 2015年5月13日16:36:29 去掉中间+
+      int vmiddle = frame.height() / 2 + frame.top;
+      int hmiddle = frame.width() / 2 + frame.left;
+      canvas.drawRect(frame.left + 2, vmiddle - 1, frame.right - 1,
+              vmiddle + 2, paint);
+      canvas.drawRect(hmiddle - 1, frame.top + 2, hmiddle + 2,
+              frame.bottom - 1, paint);
       
       float scaleX = frame.width() / (float) previewFrame.width();
       float scaleY = frame.height() / (float) previewFrame.height();
